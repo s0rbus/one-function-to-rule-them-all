@@ -64,6 +64,23 @@
   ([pred1 pred2] (fn [x] (and (pred1 x) (pred2 x))))
   ([pred1 pred2 & more] (fn [x] (reduce #(and %1 (%2 x)) (and (pred1 x) (pred2 x)) more))))
 
+ (defn lt0 [a-seq n]
+     (loop [acc 0
+            coll a-seq]
+      (if (empty? coll)
+         acc
+         (recur (+ acc (nth (first coll) n)) (rest coll)))))
+
+ (defn lt [a-seq]
+    (let [N (apply min (for [x (range 3)] (count (nth a-seq x))))]
+    (for [m (range N)]
+       (loop [ac 0 
+            col a-seq]
+        (if (or (>= m (count (first col))) (> N (count (first col))) (empty? col))
+           ac
+           (recur (+ ac (nth (first col) m)) (rest col))))
+     ))) 
+
 (defn my-map
   ([f a-seq]
      (if (empty? a-seq) a-seq
